@@ -1,0 +1,461 @@
+/* ==========================================================================
+   globals.css
+   --------------------------------------------------------------------------
+   Global stylesheet for XSTN Landing Page.
+   Contains: resets, CSS custom properties, keyframe animations,
+   utility classes, spotlight card effect, and responsive helpers.
+   ========================================================================== */
+
+/* ── Reset & Base ─────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  overflow-x: hidden;
+  font-family: var(--font-display);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+  border: none;
+}
+
+/* ── CSS Custom Properties ────────────────────────────────────────────────── */
+:root {
+  /* Colors */
+  --color-bg:        #020203;
+  --color-card:      #08080A;
+  --color-surface:   rgba(255, 255, 255, 0.015);
+  --color-accent:    #4FD1C5;
+  --color-accent-10: rgba(79, 209, 197, 0.1);
+  --color-accent-20: rgba(79, 209, 197, 0.2);
+  --color-accent-30: rgba(79, 209, 197, 0.3);
+  --color-dim:       #9ca3af;
+  --color-text:      #E5E5E5;
+  --color-white:     #ffffff;
+
+  /* Borders */
+  --border-subtle:   1px solid rgba(255, 255, 255, 0.06);
+  --border-dim:      1px solid rgba(255, 255, 255, 0.1);
+  --border-accent:   1px solid rgba(79, 209, 197, 0.3);
+
+  /* Fonts */
+  --font-display: 'Syne', sans-serif;
+  --font-mono:    'DM Mono', monospace;
+  --font-serif:   'Instrument Serif', serif;
+
+  /* Spacing scale */
+  --space-xs:  4px;
+  --space-sm:  8px;
+  --space-md:  16px;
+  --space-lg:  24px;
+  --space-xl:  32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+  --space-4xl: 96px;
+  --space-5xl: 128px;
+
+  /* Radii */
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-xl: 32px;
+  --radius-2xl: 40px;
+  --radius-full: 9999px;
+
+  /* Transitions */
+  --ease-expo: cubic-bezier(0.19, 1, 0.22, 1);
+  --ease-in:   cubic-bezier(0.4, 0, 1, 1);
+  --ease-out:  cubic-bezier(0, 0, 0.2, 1);
+  --transition-base: 0.3s var(--ease-expo);
+  --transition-slow: 0.7s var(--ease-expo);
+}
+
+/* ── Scrollbar ────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar       { width: 4px; }
+::-webkit-scrollbar-track { background: var(--color-bg); }
+::-webkit-scrollbar-thumb { background: var(--color-accent); border-radius: 2px; }
+
+/* ── Selection ────────────────────────────────────────────────────────────── */
+::selection {
+  background: rgba(79, 209, 197, 0.3);
+  color: var(--color-accent);
+}
+
+/* ── Keyframe Animations ──────────────────────────────────────────────────── */
+
+/* Ambient blob drift */
+@keyframes blob {
+  0%   { transform: translate(0, 0) scale(1); }
+  33%  { transform: translate(30px, -50px) scale(1.1); }
+  66%  { transform: translate(-20px, 20px) scale(0.9); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+
+/* Floating up-down */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-10px); }
+}
+
+/* Clockwise rotation */
+@keyframes spinCW {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* Counter-clockwise rotation */
+@keyframes spinCCW {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(-360deg); }
+}
+
+/* Ping/pulse ripple for status dots */
+@keyframes ping {
+  75%, 100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+/* Gradient text shimmer */
+@keyframes shimmer {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
+/* Fade + slide up entrance */
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Preloader counter spin icon */
+@keyframes rotateSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* ── Ambient Blobs ────────────────────────────────────────────────────────── */
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.blob-1 {
+  top: -10%; left: -10%;
+  width: 50vw; height: 50vw;
+  background: radial-gradient(circle, rgba(79, 209, 197, 0.15) 0%, transparent 70%);
+  animation: blob 20s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
+}
+.blob-2 {
+  bottom: -10%; right: -10%;
+  width: 60vw; height: 60vw;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.1) 0%, transparent 70%);
+  animation: blob 20s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
+  animation-delay: -5s;
+}
+.blob-3 {
+  top: 40%; left: 40%;
+  width: 40vw; height: 40vw;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.03) 0%, transparent 70%);
+  animation: blob 20s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
+  animation-delay: -10s;
+}
+
+/* ── Film Grain Noise Overlay ─────────────────────────────────────────────── */
+.noise-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 8000;
+  opacity: 0.035;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ── Perspective Grid (Hero background) ───────────────────────────────────── */
+.perspective-grid {
+  transform: perspective(1000px) rotateX(60deg) translateY(-100px) translateZ(-200px);
+  background-size: 80px 80px;
+  background-image:
+    linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  width: 200vw; height: 200vh;
+  position: absolute; top: 50%; left: -50%;
+  mask-image: radial-gradient(circle at center, black 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* ── Shimmer / Gradient Text ──────────────────────────────────────────────── */
+.shimmer-text {
+  background: linear-gradient(to right, #fff 20%, #4FD1C5 50%, #fff 80%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 5s ease-in-out infinite alternate;
+}
+
+/* ── Spotlight Card ───────────────────────────────────────────────────────── */
+/*
+  Interactive card component with mouse-tracking gradient border.
+  Requires JS to set --mx and --my CSS variables on mousemove.
+  See: src/components/ui/SpotlightCard.jsx
+*/
+.spotlight-card {
+  background: var(--color-surface);
+  position: relative;
+  overflow: hidden;
+  border: var(--border-subtle);
+  backdrop-filter: blur(10px);
+  transition:
+    transform 0.5s var(--ease-expo),
+    box-shadow 0.5s var(--ease-expo),
+    border-color 0.5s var(--ease-expo);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Glowing gradient border that follows mouse */
+.spotlight-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: radial-gradient(
+    800px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(255, 255, 255, 0.3),
+    transparent 40%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+/* Accent glow fill on hover */
+.spotlight-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    600px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(79, 209, 197, 0.05),
+    transparent 40%
+  );
+  opacity: 0;
+  transition: opacity 0.5s;
+  pointer-events: none;
+}
+
+.spotlight-card:hover::before,
+.spotlight-card:hover::after {
+  opacity: 1;
+}
+.spotlight-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ── Button Fill Slide-Up Effect ──────────────────────────────────────────── */
+.btn-wrap {
+  position: relative;
+  overflow: hidden;
+}
+.btn-fill {
+  position: absolute;
+  inset: 0;
+  background: var(--color-accent);
+  transform: translateY(100%);
+  transition: transform 0.5s var(--ease-expo);
+}
+.btn-wrap:hover .btn-fill {
+  transform: translateY(0);
+}
+
+/* ── Scrollytelling Word Reveal ───────────────────────────────────────────── */
+.word {
+  display: inline-block;
+  opacity: 0.15;
+  filter: blur(8px);
+  transition: opacity 0.5s var(--ease-out), filter 0.5s var(--ease-out);
+  color: var(--color-white);
+}
+.word.lit {
+  opacity: 1;
+  filter: blur(0);
+}
+.word.accent {
+  color: var(--color-accent);
+}
+.word.italic {
+  font-style: italic;
+  font-family: var(--font-serif);
+}
+
+/* ── Animation Utility Classes ────────────────────────────────────────────── */
+.float-1 { animation: float 6s ease-in-out infinite; }
+.float-2 { animation: float 6s ease-in-out infinite; animation-delay: -2s; }
+
+.spin-cw   { animation: spinCW  20s linear infinite; }
+.spin-ccw  { animation: spinCCW 30s linear infinite; }
+.spin-fast { animation: spinCW  10s linear infinite; }
+.spin-icon { animation: rotateSpin 2s linear infinite; display: inline-block; }
+
+/* ── Horizontal Scroll Layout ─────────────────────────────────────────────── */
+@media (min-width: 1024px) {
+  .h-scroll-section {
+    position: relative;
+  }
+  .h-scroll-track {
+    display: flex;
+    gap: 4rem;
+    padding: 0 20vw;
+    width: max-content;
+    align-items: center;
+    height: 100%;
+    will-change: transform;
+  }
+  .project-card {
+    width: 70vw;
+    max-width: 900px;
+    height: 65vh;
+    flex-shrink: 0;
+  }
+}
+
+@media (max-width: 1023px) {
+  .h-scroll-section { display: none; }
+  .mobile-projects  { display: block !important; }
+}
+
+/* ── Responsive Grid Helpers ──────────────────────────────────────────────── */
+.solutions-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+@media (max-width: 768px) {
+  .solutions-grid {
+    grid-template-columns: 1fr;
+  }
+  .col-span-2 {
+    grid-column: span 1 !important;
+  }
+}
+@media (min-width: 769px) and (max-width: 1023px) {
+  .solutions-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.trust-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6rem;
+  align-items: center;
+}
+@media (max-width: 1023px) {
+  .trust-grid { grid-template-columns: 1fr; gap: 3rem; }
+}
+
+.compare-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+@media (max-width: 768px) {
+  .compare-grid { grid-template-columns: 1fr; }
+}
+
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+@media (max-width: 1023px) {
+  .testimonials-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .testimonials-grid { grid-template-columns: 1fr; }
+}
+
+/* ── Preloader ────────────────────────────────────────────────────────────── */
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: var(--color-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  transition: transform 0.9s cubic-bezier(0.76, 0, 0.24, 1);
+}
+.preloader.hide {
+  transform: translateY(-100%);
+}
+
+/* ── Section Utility ──────────────────────────────────────────────────────── */
+.section-label {
+  font-size: 0.65rem;
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  display: block;
+  margin-bottom: 16px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+.section-title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  color: var(--color-white);
+  font-family: var(--font-display);
+  line-height: 1.1;
+}
+
+/* ── Mobile Nav ───────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .hamburger-btn { display: flex !important; }
+  nav > div { display: none !important; }
+}
+
+/* ── Inner page responsive grids ─────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .about-stats-grid       { grid-template-columns: 1fr 1fr !important; }
+  .vision-mission-grid    { grid-template-columns: 1fr !important; }
+  .projects-detail-grid   { grid-template-columns: 1fr !important; }
+  .partner-types-grid     { grid-template-columns: 1fr !important; }
+  .partner-cta-grid       { grid-template-columns: 1fr !important; }
+  .contact-grid           { grid-template-columns: 1fr !important; }
+  .join-grid              { grid-template-columns: 1fr !important; }
+  .process-steps-grid     { grid-template-columns: 1fr 1fr !important; }
+}
+@media (max-width: 480px) {
+  .process-steps-grid     { grid-template-columns: 1fr !important; }
+  .about-stats-grid       { grid-template-columns: 1fr !important; }
+}
